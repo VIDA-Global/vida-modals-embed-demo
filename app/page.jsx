@@ -16,15 +16,31 @@ export default function Index() {
         const data = await res.json();
 
         // Replace with your actual Vida reseller domain to customize the iframe URL.
-        const domain = "vida.io";
+        const domain = "ninjoah-reseller.ngrok.io";
 
-        // Set any parameters for which modal to open.
-        // For example, to edit the user account, you can pass `editUserAccount: true`.
-        // Recreate params for any modal by using the query strings seen when opening
-        // a modal in the Vida app.
+        // Set any parameters for which modal to open. You can find the required parameters
+        // by viewing the query string parameters used by the Vida app when opening a modal.
+
+        // Example: Edit user account modal.
         const params = {
           editUserAccount: "true",
         };
+
+        // Example: Google Calendar integration modal.
+        // const params = {
+        //   agent: "2212869", // Replace with agent ID of user
+        //   org: "2212869", // Replace with org ID of user
+        //   integrations: "googleCalendar"
+        // }
+
+        // Example: Custom VADER integration modal.
+        // const params = {
+        //   agent: "2212869", // Replace with agent ID of user
+        //   org: "2212869", // Replace with org ID of user
+        //   integrations: "vidaApp",
+        //   appId: "squareUp",
+        //   appVersion: "v1"
+        // }
 
         // Open the Vida modal with the one-time auth token and parameters.
         window.vdaModal.open(
