@@ -1,51 +1,27 @@
----
-title: "Embedding VIDA App Modals"
-description: "Guide for resellers to open parts of the VIDA app in a modal using /embed/modal/v1/script.js."
----
+# Vida Modal Demo
 
-Resellers can open specific areas of the VIDA app inside a popup modal. Include the script below on any page where you want to trigger a modal.
+This project shows how to open Vida modals in a Next.js app using the official script embed.
 
-```html
-<script src="https://vida.io/embed/modal/v1/script.js" defer></script>
-```
+## Setup
 
-## Opening a Modal
+1. Run `npm install` to get dependencies.
+2. Copy `.env.example` to `.env.local` and set these variables:
+   - `VIDA_API_TOKEN` – your API token for fetching the temporary auth token.
+   - `VIDA_CUSTOMER_EMAIL` – email of the Vida user to authenticate.
+3. Start the dev server with `npm run dev` and visit `http://localhost:3000`.
 
-Use the global `vdaModal.open()` method after the script loads. This method accepts three arguments:
+## Using the modal script
 
-1. `domain` – base URL for the VIDA instance, e.g. `"vida.io"`.
-2. `authToken` – one‑time token for auto-login.
-3. `params` – object with query parameters (such as `org`, `agent`, `signup`).
+The script `https://vida.io/embed/modal/v1/script.js` is loaded globally from `app/layout.js`. It exposes a `vdaModal` object on `window`.
 
-```javascript
-vdaModal.open("vida.io", "YOUR_TOKEN", {
-  org: "orgId123",
-  agent: "agentId456",
-  signup: true,
-});
-```
+1. The index page requests a one-time auth token from `/api/vida`.
+2. Call `window.vdaModal.open(domain, token, params)` to show a modal. Use your reseller domain for `domain` and pass query parameters as the `params` object.
+3. Register a handler with `window.vdaModal.onClose` to know when the user closes all modals.
 
-The modal automatically creates an iframe pointing to `/embed/modal` with the provided parameters. Close the modal programmatically by listening to the `onClose` callback:
+See `app/page.jsx` for a simple example.
 
-```javascript
-vdaModal.onClose(() => {
-  console.log("modal closed");
-});
-```
-
-## Required Parameters
-
-- `authToken` – one‑time authentication token used to log the user in. [See how to generate a token](https://vida.io/docs/api-reference/authorization/generate-one-time-auth-token).
-- `domain` – the VIDA domain hosting the embed. Defaults to `vida.io`.
-
-## Optional Parameters
-
-- `org` – load a specific organization.
-- `agent` – load a specific agent.
-- `signup` – redirect unauthenticated visitors to sign up.
-
-Include any additional parameters supported by the embedded pages.
-
-## Summary
-
-This guide shows how resellers can embed VIDA modals using `/embed/modal/v1/script.js`. Load the script, call `vdaModal.open()` with your token and parameters, and handle the optional `onClose` callback to react when the user exits the modal.
+## Relevant files
+- `app/layout.js` – loads the modal script.
+- `app/page.jsx` – opens a modal with the fetched token.
+- `app/api/vida/route.js` – proxy to Vida's API for one-time tokens.
+- `lib/vida.js` – helper for HTTP requests.
