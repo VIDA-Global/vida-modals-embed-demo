@@ -1,6 +1,6 @@
 # Vida Modal Demo
 
-This project shows how to open Vida modals in a Next.js app using the official script embed.
+This project shows how to open Vida modals using the official script embed.
 
 ## Setup
 
